@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../stylesheets/chat.css">
+</head>
+<body>
+    <div id="back">
+        <div id="panel">
+            <div id="online">
+                <h3>Online Users</h3>
+                <hr>
+                <div id="onlinelist">
+                   
+                </div>
+            </div>
+            <div id="messagebar">
+                <div id="overlay">
+                    <div id="istyping" class="istyping"></div>
+                    <div id="msgpanel">
+                       
+                    </div>
+                    <div id="form">
+                        <textarea name="msg" placeholder="Type your message here."></textarea>
+                      <!--  <input id="flag" type="checkbox"> -->
+                        <div id="btn">
+                            <i class="ri-send-plane-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.min.js" integrity="sha512-Jq1JnVXlkYQOYQpz31qIV/0l67d97J9I6sbILtfiSYX00Isr2zK7XDRmHW8d2iBTwNZfL7sHkHGT0EzLs90jdw==" crossorigin="anonymous"></script>
+    <script>
+        var socket = io();
+
+        //first emit 
+        var urlnewparser = new URL(window.location.href)
+       urlnewparser = urlnewparser.searchParams.get('username')
+        socket.emit('username',urlnewparser)
+
+       var text = document.querySelector('textarea')
+       var btn = document.querySelector('#btn')
+       var flag = document.querySelector('#flag')
+       var istypingDiv = document.querySelector('#istyping')
+
+        
+        text.addEventListener('keyup',(e)=>{
+            if(e.key === 'Enter'/* && flag.checked*/ && text.value.trim() !==''){
+            e.preventDefault();
+            msgemit(text)
+            }
+            else{
+               isTyping(urlnewparser)
+            }
+        })
+
+
+        btn.addEventListener('click',()=>{
+            if(text.value.trim() !==''){
+                msgemit(text);
+            }
+            
+        });
+    //function that send massage and username
+        function msgemit(msg){
+            let mymsg = {
+                user : urlnewparser,
+                message : msg.value.trim('')
+            }
+            socket.emit('msg',mymsg)
+            text.value = '';
+        }
+
+    //recive messagses
+        socket.on('msgsent',function(value){
+        //calling username check_function
+        usernamecheck(urlnewparser,value)
+         
+     })
+   
+     // listining users details
+     socket.on('usernamesent',(allusers)=>{
+            var userOnLineTemplate = '';
+            for(var x in allusers){
+                userOnLineTemplate += `<div class="user">${allusers[x]}</div>`
+               // console.log(userOnLineTemplate)
+            }
+            document.querySelector('#onlinelist').innerHTML = '';
+        document.querySelector('#onlinelist').innerHTML = userOnLineTemplate;
+        })
+
+        //check username function
+        function usernamecheck(logername,value){
+            if(logername == value.user){
+                document.querySelector('#msgpanel').innerHTML += `<div class="msg">
+            <h4> Me: </h4>
+            <p>${value.message}</p>
+        </div>`
+            }
+            else{
+                document.querySelector('#msgpanel').innerHTML += `<div class="msg">
+            <h4> ${value.user}: </h4>
+            <p>${value.message}</p>
+        </div>`
+            }
+
+        }
+        // isTyping functionlity
+  
+        function isTyping(username){
+            socket.emit('istyping', username);
+        }
+        
+        socket.on('istyping',(data)=>{
+            var userlist = data.users;
+            var typingUser = data.singleuser;
+
+        if(urlnewparser !== typingUser){
+
+            istypingDiv.innerHTML = `<div class="typing">
+                ${typingUser} is typing..</div>`
+
+            setTimeout(()=>{
+                istypingDiv.innerHTML ='';
+            },5000)
+        }
+        })
+        
+        
+    </script>
+</body>
+</body>
+</html>
