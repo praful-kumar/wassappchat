@@ -32,7 +32,7 @@ io.on( "connection", function( socket ){
     })
 
     socket.on('msg',(data)=>{
-      console.log(data)
+      
       io.emit('msgsent',data)
     })
     socket.on('istyping',(data)=>{
