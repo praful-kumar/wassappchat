@@ -1,7 +1,6 @@
 *{
     margin: 0;
     padding: 0;
-    font-family: "Product Sans";
     box-sizing: border-box;
 }
 
@@ -87,10 +86,11 @@ html,body{
 .msg{
     padding: 10px 20px;
     position: relative;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
+    
 }
-.msg>h4{
-    margin-top:15px;
+.msg h4{
+    
     position: absolute;
     margin-top:-30px;
     color: rgb(255, 255, 255);
@@ -98,6 +98,7 @@ html,body{
     font-weight: 350;
     margin-left: -15px;
 }
+
 
 #msgpanel{
     width: 100%;
@@ -145,4 +146,109 @@ textarea{
     color: rgb(100, 184, 128);
     font-size: 20px;
     position: absolute;
+}
+.me{
+    background-color: rgb(87, 167, 114) ;
+    color: #fff;
+}
+.me>h4{
+    right: 10px;
+    color: #fff;
+}
+::-webkit-scrollbar{
+    display:none;
+}
+
+
+
+
+
+
+@media only screen and (max-width:600px){
+    #back{
+        padding: 0;
+    }
+    #panel{
+        width: 100%;
+        height: 100%;
+    }
+    #online{
+        width:100%;
+        height: 100px;
+        position: absolute;
+        margin-top: -10px;
+        display: flex;
+        align-items: center;
+        
+        
+       
+    }
+    #onlinelist{
+    width: 100%;
+    height: 20px;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    
+
+    }
+    #online h3{
+        margin-left: 250px;
+        
+        margin: 0 auto;
+    }
+    #online hr{
+        display: none;
+    }
+    .user{
+        margin: 0px  15px;
+        padding: 0;
+    }
+    .user::before{
+        margin-right: 10px;
+    }
+    
+    #messagebar{
+       
+        width: 100%;
+        height: 89%;
+        margin-top: auto;
+       
+       
+    }
+    #msgpanel{
+        width: inherit;
+        height: calc(100% - 60px)
+    
+    }
+    .msg{
+        width: 100%;
+        overflow-wrap: break-word;
+        
+    }
+    textarea{
+        padding:15px 15px;
+        width: 85%;
+        height: 50px;
+        line-height: 20px;
+        border-radius: 50px;
+        
+    }
+    #btn{
+        margin-left: 20px;
+       
+    }
+    .istyping{
+        margin-top:5px;
+        margin:0 auto;
+        margin-left: -25px;
+        margin-top:-10px;
+        
+    }
+    .istyping>.typing{
+        text-transform: capitalize;
+        font-size: 15px;
+        font-weight: 300;
+    }
 }

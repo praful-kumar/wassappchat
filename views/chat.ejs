@@ -6,6 +6,7 @@
     <title>wassappchat</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="../stylesheets/chat.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 </head>
 <body>
     <div id="back">
@@ -97,7 +98,7 @@
         //check username function
         function usernamecheck(logername,value){
             if(logername == value.user){
-                document.querySelector('#msgpanel').innerHTML += `<div class="msg">
+                document.querySelector('#msgpanel').innerHTML += `<div class="msg me">
             <h4> Me: </h4>
             <p>${value.message}</p>
         </div>`
