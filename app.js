@@ -67,26 +67,26 @@ io.on( "connection",function( socket ){
       io.sockets.in(data.roomname).emit(data.roomname, data)
     })
     //online userslist update
-    socket.on('username',(userdata)=>{
+    socket.on('usernameprv',(userdata)=>{
       onlinelist[socket.id]=userdata
-      io.emit('usernamesent',onlinelist)
+      io.emit('usernamesentprv',onlinelist)
       // console.log(socket.id)
     })
    //----------------------------------
    socket.on('usernamegrp',(userdata)=>{
     allusers[socket.id]=userdata
-    io.emit('usernamesent',allusers)
+    io.emit('usernamesentgrp',allusers)
     // console.log(socket.id)
   })
     socket.on('disconnect',()=>{
 
       //group disconnection userlist update
       delete allusers[socket.id]
-      io.emit('usernamesent',allusers)
+      io.emit('usernamesentgrp',allusers)
        console.log('User disconnected')
       //--------
      delete onlinelist[socket.id]
-     io.emit('usernamesent',onlinelist)
+     io.emit('usernamesentprv',onlinelist)
       console.log('User disconnected')
     })
 });

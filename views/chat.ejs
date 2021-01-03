@@ -86,7 +86,7 @@
      })
    
      // listining users details
-     socket.on('usernamesent',(allusers)=>{
+     socket.on('usernamesentgrp',(allusers)=>{
             var userOnLineTemplate = '';
             for(var x in allusers){
                 userOnLineTemplate += `<div class="user">${allusers[x]}</div>`

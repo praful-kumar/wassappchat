@@ -45,7 +45,7 @@
         var getroomname = urlnewparseruser.searchParams.get('roomname')
         var roomname = getroomname.toLowerCase();
         console.log(roomname)
-        socket.emit('username',urlnewparser)
+        socket.emit('usernameprv',urlnewparser)
         
         var text = document.querySelector('textarea')
         var btn = document.querySelector('#btn')
@@ -129,7 +129,7 @@
       }
 
       //  // listining users details
-     socket.on('usernamesent',(allusers)=>{
+     socket.on('usernamesentprv',(allusers)=>{
             var userOnLineTemplate = '';
             for(var x in allusers){
                 userOnLineTemplate += `<div class="user">${allusers[x]}</div>`
