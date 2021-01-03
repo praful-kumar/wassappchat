@@ -8,6 +8,7 @@ const socket_io = require('socket.io')
 var indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const { all } = require('./routes/index');
+const { join } = require('path');
 
 const app = express();
 
@@ -20,9 +21,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // socket connection 
-var allusers={}
+var allusers={};
+var onlinelist ={};
 
-io.on( "connection", function( socket ){
+io.on( "connection",function( socket ){
     console.log( "A user connected" );
 
     socket.on('username',(userdata)=>{
@@ -35,18 +37,56 @@ io.on( "connection", function( socket ){
       
       io.emit('msgsent',data)
     })
-    socket.on('istyping',(data)=>{
+    //for privatechat_____________
+    socket.on('istypingprv',(data)=>{
+      let userlist ={
+        users: onlinelist,
+        singleuser:data.username,
+        roomname:data.roomname
+      }
+      io.emit('istypingprv',userlist)
+    })
+    //for group
+    socket.on('istypinggrp',(username)=>{
+      // console.log(username)
       let userlist ={
         users: allusers,
-        singleuser:data
+        singleuser:username
       }
       io.emit('istyping',userlist)
     })
-
-
+   
+    //private chat connection
+    socket.on('create-room',(data)=>{
+      socket.join(data.roomname)
+      // console.log(data)
+    })
+    socket.on('massage',(data)=>{
+      
+      // console.log(data.message)
+      io.sockets.in(data.roomname).emit(data.roomname, data)
+    })
+    //online userslist update
+    socket.on('username',(userdata)=>{
+      onlinelist[socket.id]=userdata
+      io.emit('usernamesent',onlinelist)
+      // console.log(socket.id)
+    })
+   //----------------------------------
+   socket.on('usernamegrp',(userdata)=>{
+    allusers[socket.id]=userdata
+    io.emit('usernamesent',allusers)
+    // console.log(socket.id)
+  })
     socket.on('disconnect',()=>{
-     delete allusers[socket.id]
-     io.emit('usernamesent',allusers)
+
+      //group disconnection userlist update
+      delete allusers[socket.id]
+      io.emit('usernamesent',allusers)
+       console.log('User disconnected')
+      //--------
+     delete onlinelist[socket.id]
+     io.emit('usernamesent',onlinelist)
       console.log('User disconnected')
     })
 });

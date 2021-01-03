@@ -9,5 +9,8 @@ router.get('/', function(req, res) {
 router.get('/chat', (req, res)=>{
   res.render('chat')
 })
+router.get('/pvtchat', (req, res)=>{
+  res.render('privatechat')
+})
 
 module.exports = router;

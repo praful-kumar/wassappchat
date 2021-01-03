@@ -14,7 +14,7 @@ html,body{
     height: 100%;
     background-image: url(https://images.unsplash.com/photo-1589224906659-03c8b0af4f7c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80);
     background-size: cover;
-    filter: blur(90px);
+    filter: blur(95px);
 }
 
 #panel{
@@ -24,16 +24,40 @@ html,body{
     transform: translate(-50%, -50%);
     border-radius: 10px;
     padding: 20px;
-    padding-top: 20px;
+    padding-top: 25px;
     /* height: 200px; */
-    background-color: #fff;
+    background-color: #fff; 
 }
-
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+form h4{
+    color: gray;
+    margin: 5px 0;
+    font-weight: 360;
+}
 #panel input{
     padding: 12px 20px;
     font-size: 17px;
-    border: 1px solid #eeee;
+    border: 1px solid rgb(78, 189, 240);
     outline: none;
+    display: block;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    text-transform: capitalize;
+    color: rgb(78, 189, 240);
+    
+}
+#panel hr{
+    margin-bottom: 5px;
+}
+#panel input[type=submit]{
+    color: #fff;
+    background-color:rgb(78, 189, 240);
 }
 
 #panel #img{
@@ -45,8 +69,11 @@ html,body{
     border-radius: 50%;
     width: 70px;
     height: 70px;
-    background-image: url(https://images.unsplash.com/photo-1513956589380-bad6acb9b9d4?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80);
+    background-image: url(https://cdn3.iconfinder.com/data/icons/galaxy-open-line-gradient-ii/200/chat-512.png);
     background-size: cover;
     background-position: bottom;
-    border: 10px solid #fff;
+    background-color: #fff;
+    
+    
+    
 }

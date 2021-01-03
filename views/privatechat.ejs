@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wassappchat</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../stylesheets/chat.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+</head>
+<body>
+    <div id="back">
+        <div id="panel">
+            <div id="online">
+                <h3>Online Users</h3>
+                <hr>
+                <div id="onlinelist">
+                   
+                </div>
+            </div>
+            <div id="messagebar">
+                <div id="overlay">
+                    <div id="istyping" class="istyping"></div>
+                    <div id="msgpanel">
+                       
+                    </div>
+                    <div id="form">
+                        <textarea name="msg" placeholder="Type your message here."></textarea>
+                      <!--  <input id="flag" type="checkbox"> -->
+                        <div id="btn">
+                            <i class="ri-send-plane-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.min.js" integrity="sha512-Jq1JnVXlkYQOYQpz31qIV/0l67d97J9I6sbILtfiSYX00Isr2zK7XDRmHW8d2iBTwNZfL7sHkHGT0EzLs90jdw==" crossorigin="anonymous"></script>
+    <script>
+        var socket = io();
+
+        //first emit 
+        var urlnewparseruser = new URL(window.location.href)
+         var urlnewparser = urlnewparseruser.searchParams.get('username')
+        var getroomname = urlnewparseruser.searchParams.get('roomname')
+        var roomname = getroomname.toLowerCase();
+        console.log(roomname)
+        socket.emit('username',urlnewparser)
+        
+        var text = document.querySelector('textarea')
+        var btn = document.querySelector('#btn')
+        var istypingDiv = document.querySelector('#istyping')
+        btn.addEventListener('click',()=>{
+            sendmsg()
+            text.value= '';
+            
+        })
+        let data ={
+                username:urlnewparser,
+                roomname: roomname
+            }
+        socket.emit('create-room',data)
+        function sendmsg(){
+            let data ={
+                username:urlnewparser,
+                roomname: roomname,
+                message : text.value.trim('') 
+            }
+            socket.emit('massage',data)
+        }
+
+       
+
+            
+        
+        
+        // socket.on(roomname,(msg)=>{
+
+        //     if(msg !== undefined){
+        //         console.log(msg)
+        //     }
+            
+        // })
+
+        socket.on(roomname,(value)=>{
+            // console.log(value);
+        //calling username check_function
+        usernamecheck(urlnewparser,value)
+         
+     })
+
+       //     //check username function
+        function usernamecheck(logername,value){
+            if(logername == value.username){
+                document.querySelector('#msgpanel').innerHTML += `<div class="msg me">
+            <h4> Me: </h4>
+            <p>${value.message}</p>
+        </div>`
+            scrollToButtom();
+            }
+            else{
+                document.querySelector('#msgpanel').innerHTML += `<div class="msg">
+            <h4> ${value.username}: </h4>
+            <p>${value.message}</p>
+        </div>`
+            scrollToButtom();
+            }
+
+        }
+        //key press submit
+        text.addEventListener('keyup',(e)=>{
+            if(e.key === 'Enter'/* && flag.checked*/ && text.value.trim() !==''){
+            e.preventDefault();
+            msgemit(text)
+            }
+            else{
+               isTyping(urlnewparser)
+            }
+        })
+        // //function that send massage and username
+        function msgemit(text){
+            let data ={
+                username:urlnewparser,
+                roomname: roomname,
+                message : text.value.trim('') 
+            }
+            socket.emit('massage',data)
+            text.value = '';
+      }
+
+      //  // listining users details
+     socket.on('usernamesent',(allusers)=>{
+            var userOnLineTemplate = '';
+            for(var x in allusers){
+                userOnLineTemplate += `<div class="user">${allusers[x]}</div>`
+               // console.log(userOnLineTemplate)
+            }
+            document.querySelector('#onlinelist').innerHTML = '';
+        document.querySelector('#onlinelist').innerHTML = userOnLineTemplate;
+        })
+
+         //     // isTyping functionlity
+  
+         function isTyping(username){
+            let data ={
+                username:urlnewparser,
+                roomname: roomname
+            }
+            socket.emit('istypingprv', data);
+        }
+        
+        socket.on('istypingprv',(data)=>{
+            var userlist = data.users;
+            var typingUser = data.singleuser;
+            var getroomname = data.roomname
+
+
+        if(urlnewparser !== typingUser && getroomname == roomname){
+
+            istypingDiv.innerHTML = `<div class="typing">
+                ${typingUser} is typing..</div>`
+
+            setTimeout(()=>{
+                istypingDiv.innerHTML ='';
+            },5000)
+        }
+        })
+    //     // scrollToButtom________
+        function scrollToButtom(){
+            document.querySelector('#msgpanel').scrollTop = document.querySelector('#msgpanel').scrollHeight;
+        }
+    
+    </script>
+</body>
+</body>
+</html>

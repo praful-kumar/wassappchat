@@ -40,15 +40,16 @@
         var socket = io();
 
         //first emit 
-        var urlnewparser = new URL(window.location.href)
-       urlnewparser = urlnewparser.searchParams.get('username')
-        socket.emit('username',urlnewparser)
+        var urlnewparseruser = new URL(window.location.href)
+         var urlnewparser = urlnewparseruser.searchParams.get('username')
+        
+        socket.emit('usernamegrp',urlnewparser)
 
        var text = document.querySelector('textarea')
        var btn = document.querySelector('#btn')
        var flag = document.querySelector('#flag')
        var istypingDiv = document.querySelector('#istyping')
-
+        
         
         text.addEventListener('keyup',(e)=>{
             if(e.key === 'Enter'/* && flag.checked*/ && text.value.trim() !==''){
@@ -102,37 +103,41 @@
             <h4> Me: </h4>
             <p>${value.message}</p>
         </div>`
+            scrollToButtom();
             }
             else{
                 document.querySelector('#msgpanel').innerHTML += `<div class="msg">
             <h4> ${value.user}: </h4>
             <p>${value.message}</p>
         </div>`
+            scrollToButtom();
             }
 
         }
         // isTyping functionlity
   
         function isTyping(username){
-            socket.emit('istyping', username);
+            console.log(username)
+            socket.emit('istypinggrp', username);
         }
-        
+        var typinguser;
         socket.on('istyping',(data)=>{
-            var userlist = data.users;
-            var typingUser = data.singleuser;
-
-        if(urlnewparser !== typingUser){
+            typinguser = data.singleuser;
+        if(urlnewparser !== typinguser){
 
             istypingDiv.innerHTML = `<div class="typing">
-                ${typingUser} is typing..</div>`
+                ${typinguser} is typing..</div>`
 
             setTimeout(()=>{
                 istypingDiv.innerHTML ='';
             },5000)
         }
         })
-        
-        
+        // scrollToButtom________
+        function scrollToButtom(){
+            document.querySelector('#msgpanel').scrollTop = document.querySelector('#msgpanel').scrollHeight;
+        }
+         
     </script>
 </body>
 </body>
